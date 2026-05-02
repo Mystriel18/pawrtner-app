@@ -1,0 +1,46 @@
+.pawrtner-brand-mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: inherit;
+}
+
+.pawrtner-brand-mark__logo {
+    height: 100%;
+    width: auto;
+    flex-shrink: 0;
+}
+
+.pawrtner-brand-mark__text {
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.fi-simple-header .fi-logo {
+    width: auto;
+    height: auto !important;
+}
+
+.fi-simple-header .pawrtner-brand-mark {
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5rem;
+    text-align: center;
+}
+
+.fi-simple-header .pawrtner-brand-mark__logo {
+    height: 2.5rem;
+}
+
+@media (max-width: 640px) {
+    .pawrtner-brand-mark {
+        gap: 0.5rem;
+    }
+
+    .pawrtner-brand-mark__text {
+        font-size: 1rem;
+    }
+}

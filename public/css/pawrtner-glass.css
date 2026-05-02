@@ -1,0 +1,128 @@
+/*
+ * PAWrtner — Glassmorphism Modals
+ * Targets Filament v4 modal CSS classes.
+ * Injected via PanelsRenderHook::HEAD_END in all three panel providers.
+ */
+
+/* ─── Entrance / exit animations ─────────────────────────────── */
+@keyframes glass-in {
+    from {
+        opacity: 0;
+        transform: scale(0.93) translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes glass-out {
+    from {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.93) translateY(10px);
+    }
+}
+
+@keyframes backdrop-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* ─── Backdrop overlay ───────────────────────────────────────── */
+.fi-modal-close-overlay {
+    animation: backdrop-in 0.2s ease both;
+    background: rgba(15, 23, 42, 0.45) !important;
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+}
+
+/* ─── Modal window — light mode ─────────────────────────────── */
+.fi-modal-window {
+    background: rgba(255, 255, 255, 0.62) !important;
+    backdrop-filter: blur(20px) saturate(1.8) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(1.8) !important;
+    border: 1px solid rgba(255, 255, 255, 0.55) !important;
+    box-shadow:
+        0 8px 32px 0 rgba(31, 38, 135, 0.18),
+        0 2px 8px 0 rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+    border-radius: 1.25rem !important;
+    animation: glass-in 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* ─── Slide-over panels also get glass ──────────────────────── */
+.fi-modal-slide-over .fi-modal-window {
+    border-radius: 0 !important;
+    border-left: 1px solid rgba(255, 255, 255, 0.45) !important;
+}
+
+/* ─── Modal header ─────────────────────────────────────────── */
+.fi-modal-header {
+    background: transparent !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.35) !important;
+}
+
+/* ─── Modal footer ─────────────────────────────────────────── */
+.fi-modal-footer {
+    background: transparent !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.35) !important;
+}
+
+/* ─── Dark mode ─────────────────────────────────────────────── */
+.dark .fi-modal-window {
+    background: rgba(17, 24, 39, 0.70) !important;
+    backdrop-filter: blur(20px) saturate(1.6) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(1.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.10) !important;
+    box-shadow:
+        0 8px 32px 0 rgba(0, 0, 0, 0.45),
+        0 2px 8px 0 rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+
+.dark .fi-modal-header {
+    border-bottom-color: rgba(255, 255, 255, 0.10) !important;
+}
+
+.dark .fi-modal-footer {
+    border-top-color: rgba(255, 255, 255, 0.10) !important;
+}
+
+.dark .fi-modal-close-overlay {
+    background: rgba(0, 0, 0, 0.60) !important;
+}
+
+/* ─── Responsive — reduce blur on mobile for GPU perf ────────── */
+@media (max-width: 640px) {
+    .fi-modal-window {
+        backdrop-filter: blur(12px) saturate(1.5) !important;
+        -webkit-backdrop-filter: blur(12px) saturate(1.5) !important;
+        border-radius: 1rem !important;
+        margin: 0.75rem !important;
+    }
+
+    .dark .fi-modal-window {
+        backdrop-filter: blur(12px) saturate(1.4) !important;
+        -webkit-backdrop-filter: blur(12px) saturate(1.4) !important;
+    }
+}
+
+/* ─── Notification bell dropdown also gets glass ─────────────── */
+.fi-notifications-modal .fi-modal-window,
+[x-cloak] .fi-modal-window {
+    animation: glass-in 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* ─── Confirmation / danger actions ── tinted red shimmer ─────── */
+.fi-ac-action[data-color="danger"] .fi-modal-window,
+.fi-modal-window:has(.fi-color-danger) {
+    border-color: rgba(239, 68, 68, 0.30) !important;
+    box-shadow:
+        0 8px 32px 0 rgba(239, 68, 68, 0.12),
+        0 2px 8px 0 rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7) !important;
+}

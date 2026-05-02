@@ -1,0 +1,65 @@
+<?php
+
+namespace App\Filament\Vet\Resources\Vaccinations\Tables;
+
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
+
+class VaccinationsTable
+{
+    public static function configure(Table $table): Table
+    {
+        return $table
+            ->columns([
+                TextColumn::make('pet.name')
+                    ->searchable(),
+                TextColumn::make('medicalRecord.id')
+                    ->searchable(),
+                TextColumn::make('administered_by_user_id')
+                    ->numeric()
+                    ->sortable(),
+                TextColumn::make('vaccine_name')
+                    ->searchable(),
+                TextColumn::make('manufacturer')
+                    ->searchable(),
+                TextColumn::make('batch_number')
+                    ->searchable(),
+                TextColumn::make('administered_at')
+                    ->date()
+                    ->sortable(),
+                TextColumn::make('next_due_at')
+                    ->date()
+                    ->sortable(),
+                TextColumn::make('status')
+                    ->searchable(),
+                TextColumn::make('created_by')
+                    ->numeric()
+                    ->sortable(),
+                TextColumn::make('updated_by')
+                    ->numeric()
+                    ->sortable(),
+                TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+            ])
+            ->filters([
+                //
+            ])
+            ->recordActions([
+                EditAction::make(),
+            ])
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                ]),
+            ]);
+    }
+}
