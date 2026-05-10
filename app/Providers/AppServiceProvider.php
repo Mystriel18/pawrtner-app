@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Observers\PermissionObserver;
 use App\Observers\RoleObserver;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -23,6 +24,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if (app()->environment('production')) {
+            URL::forceScheme('https');
+        }
+
         Role::observe(RoleObserver::class);
         Permission::observe(PermissionObserver::class);
     }
