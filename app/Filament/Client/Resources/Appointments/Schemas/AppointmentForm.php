@@ -15,6 +15,10 @@ use Illuminate\Database\Eloquent\Builder;
 
 class AppointmentForm
 {
+    private const CLINIC_OPEN_HOUR = 8;
+
+    private const CLINIC_LAST_SLOT_HOUR = 17;
+
     public static function configure(Schema $schema): Schema
     {
         return $schema
@@ -40,13 +44,13 @@ class AppointmentForm
                         $scheduledAt = request()->query('scheduled_at');
 
                         if (! is_string($scheduledAt) || blank($scheduledAt)) {
-                            return null;
+                            return self::defaultScheduledAt();
                         }
 
                         try {
                             return Carbon::parse($scheduledAt)->format('Y-m-d H:i:s');
                         } catch (\Throwable) {
-                            return null;
+                            return self::defaultScheduledAt();
                         }
                     })
                     ->required(),
@@ -67,5 +71,30 @@ class AppointmentForm
                 Hidden::make('updated_by')
                     ->default(fn (): ?int => auth()->id()),
             ]);
+    }
+
+    private static function defaultScheduledAt(): string
+    {
+        $slot = now()->addHour()->setSecond(0);
+
+        if ($slot->minute < 30) {
+            $slot->setMinute(30);
+        } else {
+            $slot->addHour()->setMinute(0);
+        }
+
+        if ($slot->hour < self::CLINIC_OPEN_HOUR) {
+            $slot->setTime(self::CLINIC_OPEN_HOUR, 0);
+        }
+
+        if ($slot->hour > self::CLINIC_LAST_SLOT_HOUR || ($slot->hour === self::CLINIC_LAST_SLOT_HOUR && $slot->minute > 30)) {
+            $slot->addDay()->setTime(9, 0);
+        }
+
+        while ($slot->isSunday()) {
+            $slot->addDay()->setTime(9, 0);
+        }
+
+        return $slot->format('Y-m-d H:i:s');
     }
 }
