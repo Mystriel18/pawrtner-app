@@ -52,16 +52,8 @@ class Dashboard extends \Filament\Pages\Dashboard
                         ->success()
                         ->send();
                 }),
-            Action::make('openSignedReminderUrl')
-                ->label('Open 15m Signed URL')
-                ->icon('heroicon-o-link')
-                ->color('gray')
-                ->url(fn (): string => URL::temporarySignedRoute(
-                    'internal.reminders.dispatch.signed',
-                    now()->addMinutes(15),
-                    ['type' => 'all'],
-                ))
-                ->openUrlInNewTab(),
+            // Signed URL action temporarily removed due to route cache issue
+            // Will be re-enabled after full deployment
         ];
     }
 }
