@@ -7,14 +7,12 @@ use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\URL;
 
 class Dashboard extends \Filament\Pages\Dashboard
 {
     protected function getHeaderActions(): array
     {
-        $actions = [
+        return [
             Action::make('dispatchRemindersNow')
                 ->label('Dispatch Reminders')
                 ->icon('heroicon-o-bell-alert')
@@ -54,21 +52,5 @@ class Dashboard extends \Filament\Pages\Dashboard
                         ->send();
                 }),
         ];
-
-        // Only add the signed URL action if the route exists
-        if (Route::has('internal.reminders.dispatch.signed')) {
-            $actions[] = Action::make('openSignedReminderUrl')
-                ->label('Open 15m Signed URL')
-                ->icon('heroicon-o-link')
-                ->color('gray')
-                ->url(fn (): string => URL::temporarySignedRoute(
-                    'internal.reminders.dispatch.signed',
-                    now()->addMinutes(15),
-                    ['type' => 'all'],
-                ))
-                ->openUrlInNewTab();
-        }
-
-        return $actions;
     }
 }
