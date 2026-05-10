@@ -6,6 +6,7 @@ use App\Filament\Client\Auth\Register;
 use App\Filament\Client\Widgets\MyPetsWidget;
 use App\Filament\Client\Widgets\UpcomingAppointmentsWidget;
 use App\Support\FilamentBrand;
+use Filament\Actions\Action;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -50,6 +51,13 @@ class ClientPanelProvider extends PanelProvider
             ->discoverPages(in: app_path('Filament/Client/Pages'), for: 'App\Filament\Client\Pages')
             ->pages([
                 Dashboard::class,
+            ])
+            ->userMenuItems([
+                'logout' => fn (Action $action): Action => $action
+                    ->requiresConfirmation()
+                    ->modalHeading('Log out?')
+                    ->modalDescription('Are you sure you want to log out from PAWrtner Client Portal?')
+                    ->modalSubmitActionLabel('Log out'),
             ])
             ->discoverWidgets(in: app_path('Filament/Client/Widgets'), for: 'App\Filament\Client\Widgets')
             ->widgets([

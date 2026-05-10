@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use App\Filament\Vet\Widgets\VetAppointmentStatsOverview;
 use App\Support\FilamentBrand;
+use Filament\Actions\Action;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -47,6 +48,13 @@ class VetPanelProvider extends PanelProvider
             ->discoverPages(in: app_path('Filament/Vet/Pages'), for: 'App\Filament\Vet\Pages')
             ->pages([
                 Dashboard::class,
+            ])
+            ->userMenuItems([
+                'logout' => fn (Action $action): Action => $action
+                    ->requiresConfirmation()
+                    ->modalHeading('Log out?')
+                    ->modalDescription('Are you sure you want to log out from PAWrtner Vet Desk?')
+                    ->modalSubmitActionLabel('Log out'),
             ])
             ->discoverWidgets(in: app_path('Filament/Vet/Widgets'), for: 'App\Filament\Vet\Widgets')
             ->widgets([
