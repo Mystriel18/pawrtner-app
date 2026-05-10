@@ -25,5 +25,10 @@
     "libxpm-dev",
     "libzip-dev",
     "zlib1g-dev"
-  ]
+  ],
+  "deploy": {
+    "aptPackages": [
+      "libpq5"
+    ]
+  }
 }
