@@ -52,7 +52,7 @@ class AdminPanelProvider extends PanelProvider
             ->userMenuItems([
                 'logout' => fn (Action $action): Action => $action
                     ->extraAttributes([
-                        'x-on:click' => "if (!confirm('Are you sure you want to log out from PAWrtner Admin?')) { $event.preventDefault(); $event.stopImmediatePropagation(); }",
+                        'x-on:click' => 'if (!confirm(\'Are you sure you want to log out from PAWrtner Admin?\')) { $event.preventDefault(); $event.stopImmediatePropagation(); }',
                     ]),
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')

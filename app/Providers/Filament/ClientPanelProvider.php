@@ -55,7 +55,7 @@ class ClientPanelProvider extends PanelProvider
             ->userMenuItems([
                 'logout' => fn (Action $action): Action => $action
                     ->extraAttributes([
-                        'x-on:click' => "if (!confirm('Are you sure you want to log out from PAWrtner Client Portal?')) { $event.preventDefault(); $event.stopImmediatePropagation(); }",
+                        'x-on:click' => 'if (!confirm(\'Are you sure you want to log out from PAWrtner Client Portal?\')) { $event.preventDefault(); $event.stopImmediatePropagation(); }',
                     ]),
             ])
             ->discoverWidgets(in: app_path('Filament/Client/Widgets'), for: 'App\Filament\Client\Widgets')
