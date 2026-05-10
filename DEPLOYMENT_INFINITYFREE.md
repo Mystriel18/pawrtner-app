@@ -23,10 +23,37 @@
 # Navigate to project
 cd "C:\Users\Jed Chrixtian\Herd\pawrtner"
 
-# Create deployment zip (excludes node_modules and unneeded files)
-$exclude = @('node_modules', '.git', '.gitignore', 'tests', 'database/seeders', 'DEPLOYMENT_INFINITYFREE.md')
-$files = Get-ChildItem -Recurse | Where-Object { -not ($exclude | Where-Object { $_.FullName -match $_ }) }
-$files | Compress-Archive -DestinationPath pawrtner-deploy.zip
+# Build deployment zip using reusable ignore rules
+powershell -ExecutionPolicy Bypass -File .\deploy\package-infinityfree.ps1
+```
+
+The script reads ignore patterns from `.deployignore`, so you only update one file when you want to include/exclude something.
+
+### Option A2: Package + Upload in One Command (FTP)
+
+If you already have InfinityFree FTP credentials, you can package and upload in one command:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\deploy\deploy-infinityfree.ps1 `
+    -FtpHost "ftpupload.net" `
+    -FtpPort 21 `
+    -FtpUsername "your_ftp_username" `
+    -FtpPassword "your_ftp_password" `
+    -RemotePath "/htdocs"
+```
+
+After upload, open InfinityFree File Manager, extract `pawrtner-deploy.zip`, then continue with `.env` and database setup steps.
+
+Default `.deployignore`:
+
+```text
+node_modules/
+.git/
+tests/
+database/seeders/
+DEPLOYMENT_INFINITYFREE.md
+.gitignore
+.deploy-stage/
 ```
 
 ### Option B: Manual upload
@@ -219,6 +246,40 @@ Route::get('/setup', function () {
 - ✅ **Filament admin panel** → Works perfectly
 - ✅ **Database queries** → Full MySQL support
 - ✅ **File uploads** → Works (use `storage/app/` or `public/uploads/`)
+
+### Manual Reminder Dispatch (No Cron Fallback)
+
+If cron is not available, trigger reminders manually using the protected endpoint:
+
+1. Set a strong key in `.env`:
+
+```env
+REMINDER_DISPATCH_KEY=replace_with_a_long_random_secret
+```
+
+2. Trigger the endpoint (GET or POST):
+
+```text
+https://yourdomain.infinityfreeapp.com/internal/reminders/dispatch?key=YOUR_SECRET&type=all
+```
+
+Alternative (signed URL, no raw secret in query):
+
+```text
+https://yourdomain.infinityfreeapp.com/internal/reminders/dispatch/signed?expires=...&signature=...&type=all
+```
+
+Generate this from the Admin dashboard action **Open 15m Signed URL**.
+
+Optional query parameters:
+- `type`: `all`, `appointment_upcoming`, `appointment_follow_up`, `vaccination_due`
+- `dry_run`: `1` to simulate without creating notifications
+
+Security notes:
+- Keep the key private and rotate it periodically.
+- Prefer passing key via `X-Reminder-Key` header when using scripts.
+- Endpoint is rate-limited to 6 requests per minute.
+- Signed URLs expire automatically (15 minutes by default).
 
 ## Post-Deployment
 

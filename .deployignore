@@ -1,0 +1,7 @@
+node_modules/
+.git/
+tests/
+database/seeders/
+DEPLOYMENT_INFINITYFREE.md
+.gitignore
+.deploy-stage/
